@@ -48,7 +48,7 @@ function fetchCurrentLabels(did: string) {
       .prepare<
         unknown[],
         ComAtprotoLabelDefs.Label
-      >(`SELECT * FROM labels WHERE uri = ?`)
+      >(`SELECT * FROM labels WHERE uri = ? AND val LIKE '${category}-%' ORDER BY cts DESC`)
       .all(did);
 
     const labels = query.reduce((set, label) => {
