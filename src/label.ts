@@ -1,6 +1,5 @@
 import { AppBskyActorDefs, ComAtprotoLabelDefs } from '@atproto/api';
-import { DID, PORT, SIGNS, SIGNING_KEY, DELETE } from './constants.js';
-import { CATEGORY_PREFIXES } from './types.js';
+import { DID, PORT, TEAMS, SIGNING_KEY, DELETE } from './constants.js';
 import type { Category } from './types.js';
 import { LabelerServer } from '@skyware/labeler';
 
@@ -40,17 +39,16 @@ export const label = async (subject: string | AppBskyActorDefs.ProfileView, rkey
 function fetchCurrentLabels(did: string) {
   console.group('Fetching current labels');
   console.log('DID:', did);
-  const categories = ['sun', 'moon', 'rising'];
+  const categories = ['nfl'];
   const labelCategories: Record<string, Set<string>> = {};
 
   for (const category of categories) {
     console.group(`Category: ${category}`);
-    const prefix = category === 'sun' ? 'aaa-' : category === 'moon' ? 'bbb-' : 'ccc-';
     const query = server.db
       .prepare<
         unknown[],
         ComAtprotoLabelDefs.Label
-      >(`SELECT * FROM labels WHERE uri = ? AND val LIKE '${prefix}${category}-%' ORDER BY cts DESC`)
+      >(`SELECT * FROM labels WHERE uri = ? AND val LIKE '${category}-%' ORDER BY cts DESC`)
       .all(did);
 
     const labels = query.reduce((set, label) => {
@@ -131,8 +129,8 @@ async function addOrUpdateLabel(did: string, rkey: string, labelCategories: Reco
 function findLabelByPost(rkey: string) {
   console.group('Finding label...');
   console.log('rkey:', rkey);
-  for (const category of ['sun', 'moon', 'rising'] as const) {
-    const found = SIGNS[category].find((sign) => sign.post === rkey);
+  for (const category of ['nfl'] as const) {
+    const found = TEAMS[category].find((team) => team.post === rkey);
     if (found) {
       console.log('Found label:', found);
       console.groupEnd();
@@ -145,10 +143,9 @@ function findLabelByPost(rkey: string) {
 }
 
 function getCategoryFromLabel(label: string): Category {
-  for (const [category, prefix] of Object.entries(CATEGORY_PREFIXES)) {
-    if (label.startsWith(`${prefix}-${category}-`)) {
-      return category as Category;
-    }
+  const category = 'nfl';
+  if (label.startsWith(`${category}-`)) {
+    return category as Category;
   }
   throw new Error(`Invalid label: ${label}`);
 }

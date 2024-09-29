@@ -1,5 +1,5 @@
 {
-  "name": "zodiacsigns-bsky",
+  "name": "nfl-labeler",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@atproto/api": "^0.13.7",
-    "@skyware/labeler": "^0.1.6",
+    "@skyware/labeler": "^0.1.7",
     "bufferutil": "^4.0.8",
     "dotenv": "^16.4.5",
     "ws": "^8.18.0"

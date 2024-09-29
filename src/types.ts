@@ -1,22 +1,13 @@
-export type Category = 'sun' | 'moon' | 'rising';
-// we need this to keep the sun - moon - rising order on the frontend
-type CategoryPrefix = 'aaa' | 'bbb' | 'ccc';
+export type Category = 'nfl';
 
-interface ZodiacSign {
+interface NFLTeam {
   post: string;
-  label: `${CategoryPrefix}-${Category}-${string}`;
+  label: `${Category}-${string}`;
   displayLabel: string;
   enDesc: string;
-  brDesc: string;
 }
 
-export type SignsRecord = Record<Category, ZodiacSign[]>;
-
-export const CATEGORY_PREFIXES: Record<Category, CategoryPrefix> = {
-  sun: 'aaa',
-  moon: 'bbb',
-  rising: 'ccc',
-};
+export type TeamsRecord = Record<Category, NFLTeam[]>;
 
 export interface EventStream {
   did: string;
