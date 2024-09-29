@@ -1,6 +1,5 @@
 import { AppBskyActorDefs, ComAtprotoLabelDefs } from '@atproto/api';
 import { DID, PORT, TEAMS, SIGNING_KEY, DELETE } from './constants.js';
-import { CATEGORY_PREFIXES } from './types.js';
 import type { Category } from './types.js';
 import { LabelerServer } from '@skyware/labeler';
 
@@ -45,12 +44,11 @@ function fetchCurrentLabels(did: string) {
 
   for (const category of categories) {
     console.group(`Category: ${category}`);
-    const prefix = category === 'nfl' ? 'aaa-' : '';
     const query = server.db
       .prepare<
         unknown[],
         ComAtprotoLabelDefs.Label
-      >(`SELECT * FROM labels WHERE uri = ? AND val LIKE '${prefix}${category}-%' ORDER BY cts DESC`)
+      >(`SELECT * FROM labels WHERE uri = ?`)
       .all(did);
 
     const labels = query.reduce((set, label) => {
@@ -145,10 +143,9 @@ function findLabelByPost(rkey: string) {
 }
 
 function getCategoryFromLabel(label: string): Category {
-  for (const [category, prefix] of Object.entries(CATEGORY_PREFIXES)) {
-    if (label.startsWith(`${prefix}-${category}-`)) {
-      return category as Category;
-    }
+  const category = 'nfl';
+  if (label.startsWith(`${category}-`)) {
+    return category as Category;
   }
   throw new Error(`Invalid label: ${label}`);
 }

@@ -1,19 +1,13 @@
 export type Category = 'nfl';
-// we need this to keep the sun - moon - rising order on the frontend
-type CategoryPrefix = 'aaa';
 
 interface NFLTeam {
   post: string;
-  label: `${CategoryPrefix}-${Category}-${string}`;
+  label: `${Category}-${string}`;
   displayLabel: string;
   enDesc: string;
 }
 
 export type TeamsRecord = Record<Category, NFLTeam[]>;
-
-export const CATEGORY_PREFIXES: Record<Category, CategoryPrefix> = {
-  nfl: 'aaa'
-};
 
 export interface EventStream {
   did: string;
